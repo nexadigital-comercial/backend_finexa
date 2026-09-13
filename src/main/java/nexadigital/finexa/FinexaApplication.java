@@ -9,5 +9,6 @@ public class FinexaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FinexaApplication.class, args);
 		System.out.print("Hello System JAVA!");
+		System.out.print("SPRING BOOT");
 	}
 }
