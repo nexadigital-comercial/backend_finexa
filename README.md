@@ -34,6 +34,7 @@ src/
     │           ├── Entity/
     │           ├── Repository/
     │           ├── Service/
+    |           |-- DTO/
     │           └── FinexaApplication.java
     │
     └── resources/
