@@ -1,7 +1,9 @@
 package nexadigital.finexa.FinexaController;
 
-import nexadigital.finexa.FinexaEntity.UsuarioEntity;
+import nexadigital.finexa.FinexaDTO.UsuarioRespostaDTO;
+import nexadigital.finexa.FinexaDTO.UsuarioCadastroDTO;
 import nexadigital.finexa.FinexaService.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +18,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuarios")
-    public UsuarioEntity salvar(@RequestBody UsuarioEntity usuario) {
+    public UsuarioRespostaDTO salvar(@Valid @RequestBody UsuarioCadastroDTO usuario) {
         return usuarioService.salvar(usuario);
     }
 }
