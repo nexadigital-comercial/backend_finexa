@@ -21,6 +21,10 @@ public class UsuarioService {
 
     public UsuarioRespostaDTO salvar(UsuarioCadastroDTO usuarioDTO) {
 
+        if (usuarioRepository.existsByEmail(usuarioDTO.getEmail())) {
+            throw new IllegalArgumentException("E-mail já cadastrado.");
+        }
+
         UsuarioEntity usuario = new UsuarioEntity();
 
         usuario.setNome(usuarioDTO.getNome());
