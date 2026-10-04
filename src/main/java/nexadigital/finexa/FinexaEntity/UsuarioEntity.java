@@ -11,7 +11,10 @@ public class UsuarioEntity {
     private Long id;
 
     private String nome;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     private String senha;
 
     public Long getId() {
