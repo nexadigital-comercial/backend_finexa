@@ -3,6 +3,7 @@ package nexadigital.finexa.FinexaService;
 import nexadigital.finexa.FinexaDTO.UsuarioCadastroDTO;
 import nexadigital.finexa.FinexaDTO.UsuarioRespostaDTO;
 import nexadigital.finexa.FinexaEntity.UsuarioEntity;
+import nexadigital.finexa.FinexaException.EmailJaCadastradoException;
 import nexadigital.finexa.FinexaRepository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class UsuarioService {
     public UsuarioRespostaDTO salvar(UsuarioCadastroDTO usuarioDTO) {
 
         if (usuarioRepository.existsByEmail(usuarioDTO.getEmail())) {
-            throw new IllegalArgumentException("E-mail já cadastrado.");
+            throw new EmailJaCadastradoException("E-mail já cadastrado.");
         }
 
         UsuarioEntity usuario = new UsuarioEntity();

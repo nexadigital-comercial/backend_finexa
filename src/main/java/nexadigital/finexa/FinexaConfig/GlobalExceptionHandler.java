@@ -2,6 +2,7 @@ package nexadigital.finexa.FinexaConfig;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import nexadigital.finexa.FinexaException.EmailJaCadastradoException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,10 +32,10 @@ public class GlobalExceptionHandler {
         return errors;
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(EmailJaCadastradoException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleIllegalArgumentException(
-            IllegalArgumentException ex) {
+    public Map<String, String> handleEmailJaCadastrado(
+            EmailJaCadastradoException ex) {
 
         Map<String, String> error = new HashMap<>();
 
@@ -42,4 +43,5 @@ public class GlobalExceptionHandler {
 
         return error;
     }
+
 }
