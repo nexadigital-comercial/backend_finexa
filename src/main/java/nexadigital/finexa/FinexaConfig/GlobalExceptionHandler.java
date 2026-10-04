@@ -3,6 +3,7 @@ package nexadigital.finexa.FinexaConfig;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import nexadigital.finexa.FinexaException.EmailJaCadastradoException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,6 +41,18 @@ public class GlobalExceptionHandler {
         Map<String, String> error = new HashMap<>();
 
         error.put("erro", ex.getMessage());
+
+        return error;
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleDataIntegrityViolation(
+            DataIntegrityViolationException ex) {
+
+        Map<String, String> error = new HashMap<>();
+
+        error.put("erro", "E-mail já cadastrado.");
 
         return error;
     }
