@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmailJaCadastradoException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public Map<String, String> handleEmailJaCadastrado(
             EmailJaCadastradoException ex) {
 
@@ -46,13 +46,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleDataIntegrityViolation(
             DataIntegrityViolationException ex) {
 
         Map<String, String> error = new HashMap<>();
 
-        error.put("erro", "E-mail já cadastrado.");
+        error.put("erro", "Ocorreu um erro interno ao processar a solicitação.");
 
         return error;
     }
