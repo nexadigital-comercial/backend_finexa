@@ -1,13 +1,17 @@
+
 package nexadigital.finexa.FinexaConfig;
 
+import nexadigital.finexa.FinexaDTO.ErroRespostaDTO;
+import nexadigital.finexa.FinexaException.EmailJaCadastradoException;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import nexadigital.finexa.FinexaException.EmailJaCadastradoException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,45 +20,54 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationErrors(
+    public ErroRespostaDTO handleValidationErrors(
             MethodArgumentNotValidException ex) {
 
-        Map<String, String> errors = new HashMap<>();
+        Map<String, String> fieldErrors = new HashMap<>();
 
         ex.getBindingResult()
                 .getFieldErrors()
                 .forEach(error ->
-                        errors.put(
+                        fieldErrors.putIfAbsent(
                                 error.getField(),
                                 error.getDefaultMessage()
                         )
                 );
 
-        return errors;
+        return new ErroRespostaDTO(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "VALIDATION_ERROR",
+                "Existem campos inválidos.",
+                fieldErrors
+        );
     }
 
     @ExceptionHandler(EmailJaCadastradoException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleEmailJaCadastrado(
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroRespostaDTO handleEmailJaCadastrado(
             EmailJaCadastradoException ex) {
 
-        Map<String, String> error = new HashMap<>();
-
-        error.put("erro", ex.getMessage());
-
-        return error;
+        return new ErroRespostaDTO(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "EMAIL_ALREADY_EXISTS",
+                ex.getMessage(),
+                null
+        );
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleDataIntegrityViolation(
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErroRespostaDTO handleDataIntegrityViolation(
             DataIntegrityViolationException ex) {
 
-        Map<String, String> error = new HashMap<>();
-
-        error.put("erro", "E-mail já cadastrado.");
-
-        return error;
+        return new ErroRespostaDTO(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "DATABASE_ERROR",
+                "Ocorreu um erro interno ao processar a solicitação.",
+                null
+        );
     }
-
 }
